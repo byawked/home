@@ -4,9 +4,9 @@
   --background: rgb(25, 25, 30);
   --foreground: #171717;
 
-  --crt-red: rgb(218, 49, 49);
-  --crt-green: rgb(112, 159, 115);
-  --crt-blue: rgb(40, 129, 206);
+  --crt-red: rgba(255, 0, 0, 1);
+  --crt-green: rgba(0, 255, 0, 1);
+  --crt-blue: rgba(0, 0, 255, 1);
 }
 
 @theme inline {
@@ -29,18 +29,16 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* bg effect credit - https://codepen.io/thisanimus/pen/OJpaqWz */
+/* bg effect inspired by - https://codepen.io/thisanimus/pen/OJpaqWz */
 .bg-crt {
   background-color: rgb(25, 25, 30);
-  text-shadow: 0 0 0.2em currentColor, 1px 1px rgba(255, 0, 255, 0.5),
-    -1px -1px rgba(0, 255, 255, 0.4);
   position: relative;
   &:before,
   &:after {
     content: "";
     transform: translateZ(0);
     pointer-events: none;
-    mix-blend-mode: overlay;
+    mix-blend-mode: multiply;
     position: absolute;
     height: 100%;
     width: 100%;
@@ -50,18 +48,16 @@ body {
   }
 
   &:before {
-    background: repeating-linear-gradient(
-      var(--crt-red) 0px,
-      var(--crt-green) 2px,
-      var(--crt-blue) 4px
-    );
+    background: 50% 50% / auto 4px repeat
+      repeating-linear-gradient(to bottom, #00000000 0% 75%, #000000ff 75% 100%);
   }
   &:after {
-    background: repeating-linear-gradient(
-      90deg,
-      var(--crt-red) 1px,
-      var(--crt-green) 2px,
-      var(--crt-blue) 3px
-    );
+    background: 0% 50% / 3px auto repeat
+      repeating-linear-gradient(
+        to right,
+        #ff0000ff 0% 33.33%,
+        #00ff00ff 33.33% 66.66%,
+        #0000ffff 66.66% 100%
+      );
   }
 }
