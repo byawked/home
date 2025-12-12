@@ -2,11 +2,17 @@
 
 :root {
   --background: rgb(25, 25, 30);
-  --foreground: #171717;
+  --foreground: #ffffff;
 
-  --crt-red: rgba(255, 0, 0, 1);
-  --crt-green: rgba(0, 255, 0, 1);
-  --crt-blue: rgba(0, 0, 255, 1);
+  --crt-red: #ff0000ff;
+  --crt-green: #00ff00ff;
+  --crt-blue: #0000ffff;
+
+  --input-font-size: 24px;
+  --input-prefix-width: 100px;
+  --input-caret-height: var(--input-font-size);
+  --input-caret-width: calc(var(--input-font-size) / 2);
+  --input-caret-width-padded: calc(var(--input-caret-width) + 2px);
 }
 
 @theme inline {
@@ -19,7 +25,19 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+  &:after {
+    content: "";
+    transform: translateZ(0);
+    pointer-events: none;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    box-shadow: inset 0px 0px 100px 0px rgba(0, 0, 0, 0.7);
+  }
 }
 
 /* bg effect inspired by - https://codepen.io/thisanimus/pen/OJpaqWz */
@@ -48,9 +66,72 @@ body {
     background: 0% 50% / 3px auto repeat
       repeating-linear-gradient(
         to right,
-        #ff0000ff 0% 33.33%,
-        #00ff00ff 33.33% 66.66%,
-        #0000ffff 66.66% 100%
+        var(--crt-red) 0% 33.33%,
+        var(--crt-green) 33.33% 66.66%,
+        var(--crt-blue) 66.66% 100%
       );
   }
+}
+
+.input {
+  font-size: var(--input-font-size);
+  line-height: var(--input-font-size);
+  caret-color: transparent;
+  /* magic number: width of parent - prefix width - caret width */
+  max-width: calc(
+    100% - var(--input-prefix-width) - var(--input-caret-width-padded)
+  );
+}
+
+.input:focus {
+  outline: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.input-container {
+  width: 100%;
+  cursor: text;
+  font-size: var(--input-font-size);
+}
+
+.input-wrapper {
+  position: relative;
+  /* magic number: caret width + 2px (spacing) */
+  padding-right: var(--input-caret-width-padded);
+}
+
+.input-container:focus-within .input-wrapper:after {
+  content: "";
+  background: var(--foreground);
+  transform: translateZ(0);
+  pointer-events: none;
+  position: absolute;
+  height: var(--input-caret-height);
+  width: var(--input-caret-width);
+  right: 0;
+  top: 50%;
+  /* magic number: font size / 2 */
+  transform: translateY(calc(0px - calc(var(--input-caret-height) / 2)));
+  z-index: 1;
+  animation: blink 1s linear infinite;
+}
+
+.input-prefix {
+  display: inline-block;
+  width: var(--input-prefix-width);
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.command-row {
+  font-size: var(--input-font-size);
+  line-height: var(--input-font-size);
 }
